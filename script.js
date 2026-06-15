@@ -1,7 +1,5 @@
 const logoBtn = document.getElementById("header");
 const gameSection = document.getElementById("game-section");
-
-// 추가된 스타트 레이어 및 버튼 가져오기
 const startOverlay = document.getElementById("start-overlay");
 const startBtn = document.getElementById("start-btn");
 
@@ -21,30 +19,29 @@ if (logoBtn) {
                 gameSection.scrollIntoView({ behavior: "smooth" });
             }, 10);
           
-            // 로고 더블클릭 시에는 판만 초기화하고, 스타트 창을 보여줍니다.
             resetGameVariables();
-            isGameOver = true; // 버튼 누르기 전까지는 루프 정지
-            if (startOverlay) startOverlay.style.display = "flex"; // 스타트 창 열기
+            isGameOver = true;
+            if (startOverlay) startOverlay.style.display = "flex"; 
             initBricks();
             
-            // 공과 패들의 배치만 먼저 보여주기 위해 1프레임만 렌더링
-            isGameOver = false;
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            drawBricks();
-            drawBall();
-            drawPaddle();
-            drawScoreAndLives();
-            isGameOver = true;
+            //
+            if (ctx) {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                drawBricks();
+                drawBall();
+                drawPaddle();
+                drawScoreAndLives();
+            }
         }
     });
 }
 
-// 🕹️ 스타트 버튼 클릭 이벤트 등록
 if (startBtn) {
-    startBtn.addEventListener("click", function() {
-        if (startOverlay) startOverlay.style.display = "none"; // 스타트창 숨기기
-        isGameOver = false; // 게임 시작!
-        draw(); // 루프 구동
+    startBtn.addEventListener("click", function(e) {
+        e.stopPropagation();
+        if (startOverlay) startOverlay.style.display = "none"; 
+        isGameOver = false;
+        draw(); 
     });
 }
 
@@ -80,8 +77,6 @@ function resetGameVariables() {
     if (!canvas) return;
     x = canvas.width / 2;
     y = canvas.height - 30;
-    
-    // 🐢 공의 속도를 기존 3에서 1.5로 낮춰서 2배 느리게 설정!
     dx = 1.5; 
     dy = -1.5; 
     
@@ -197,7 +192,6 @@ function draw() {
     if (y + dy < ballRadius) dy = -dy;
     else if (y + dy > canvas.height - ballRadius - 5) {
         if (x > paddleX && x < paddleX + paddleWidth) {
-            // 속도가 느려졌으므로 반사 각도 가중치도 4에서 2로 비례하게 낮춰 정밀도를 높입니다
             let hitPos = (x - (paddleX + paddleWidth / 2)) / (paddleWidth / 2);
             dx = hitPos * 2; 
             dy = -dy;
@@ -215,7 +209,6 @@ function draw() {
         }
     }
 
-    // 공 속도에 맞춰 패들의 이동 속도도 6에서 4로 부드럽게 조정
     if (rightPressed && paddleX < canvas.width - paddleWidth) paddleX += 4;
     else if (leftPressed && paddleX > 0) paddleX -= 4;
 
