@@ -2,6 +2,7 @@ const logoBtn = document.getElementById("header");
 const gameSection = document.getElementById("game-section");
 const startOverlay = document.getElementById("start-overlay");
 const startBtn = document.getElementById("start-btn");
+let gameState = 0; 
 
 if (logoBtn) {
     logoBtn.style.cursor = "pointer";
@@ -18,21 +19,20 @@ if (logoBtn) {
                 gameSection.classList.add("show"); 
                 gameSection.scrollIntoView({ behavior: "smooth" });
             }, 10);
-          
             resetGameVariables();
-            isGameOver = true;
+            gameState = 0; 
+            isGameOver = false; 
             if (startOverlay) startOverlay.style.display = "flex"; 
             initBricks();
-            drawWaitingFrames();
+            draw();
         }
     });
 }
-
 if (startBtn) {
     startBtn.addEventListener("click", function(e) {
         e.stopPropagation(); 
         if (startOverlay) startOverlay.style.display = "none"; 
-        isGameOver = false; 
+        gameState = 1;
     });
 }
 
@@ -64,20 +64,24 @@ let lives = 3;
 let isGameOver = true; 
 let bricks = [];
 
-function mouseMoveHandler(e) {
+function resetGameVariables() {
     if (!canvas) return;
-    const rect = canvas.getBoundingClientRect();
-    const relativeX = e.clientX - rect.left;
-    const relativeY = e.clientY - rect.top;
+    x = canvas.width / 2;
+    y = canvas.height - 30;
+    dx = 1.5; 
+    dy = -1.5; 
+    
+    paddleX = (canvas.width - paddleWidth) / 2;
+    score = 0;
+    lives = 3;
+    if (overlay) overlay.style.display = "none";
+}
 
-    if (relativeX >= 0 && relativeX <= rect.width && relativeY >= 0 && relativeY <= rect.height) {
-        const scale = canvas.width / rect.width;
-        const canvasMouseX = relativeX * scale;
-        paddleX = canvasMouseX - paddleWidth / 2;
-        if (paddleX < 0) {
-            paddleX = 0;
-        } else if (paddleX > canvas.width - paddleWidth) {
-            paddleX = canvas.width - paddleWidth;
+function initBricks() {
+    for (let c = 0; c < brickColumnCount; c++) {
+        bricks[c] = [];
+        for (let r = 0; r < brickRowCount; r++) {
+            bricks[c][r] = { x: 0, y: 0, status: 1 };
         }
     }
 }
@@ -97,11 +101,21 @@ function keyUpHandler(e) {
 }
 function mouseMoveHandler(e) {
     if (!canvas) return;
-    const relativeX = e.clientX - canvas.getBoundingClientRect().left;
-    const scale = canvas.width / canvas.getBoundingClientRect().width;
-    const canvasMouseX = relativeX * scale;
-    if (canvasMouseX > 0 && canvasMouseX < canvas.width) {
+    const rect = canvas.getBoundingClientRect();
+    const relativeX = e.clientX - rect.left;
+    const relativeY = e.clientY - rect.top;
+
+    if (relativeX >= 0 && relativeX <= rect.width && relativeY >= 0 && relativeY <= rect.height) {
+        const scale = canvas.width / rect.width;
+        const canvasMouseX = relativeX * scale;
+        
         paddleX = canvasMouseX - paddleWidth / 2;
+        
+        if (paddleX < 0) {
+            paddleX = 0;
+        } else if (paddleX > canvas.width - paddleWidth) {
+            paddleX = canvas.width - paddleWidth;
+        }
     }
 }
 
@@ -165,64 +179,49 @@ function drawScoreAndLives() {
     ctx.fillText("LIVES: " + lives, canvas.width - 75, 22);
 }
 
-function drawWaitingFrames() {
-    if (!ctx) return;
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    drawBricks();
-    drawBall();
-    drawPaddle();
-    drawScoreAndLives();
-    if (!isGameOver) {
-        draw();
-        return;
-    }
-    
-    if (rightPressed && paddleX < canvas.width - paddleWidth) paddleX += 4;
-    else if (leftPressed && paddleX > 0) paddleX -= 4;
-
-    requestAnimationFrame(drawWaitingFrames);
-}
-
 function draw() {
     if (isGameOver || !ctx) return;
-    
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawBricks();
     drawBall();
     drawPaddle();
     drawScoreAndLives();
-    collisionDetection();
-
-    if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) dx = -dx;
-    if (y + dy < ballRadius) dy = -dy;
-    else if (y + dy > canvas.height - ballRadius - 5) {
-        if (x > paddleX && x < paddleX + paddleWidth) {
-            let hitPos = (x - (paddleX + paddleWidth / 2)) / (paddleWidth / 2);
-            dx = hitPos * 2; 
-            dy = -dy;
-        } else {
-            lives--;
-            if (!lives) {
-                endGame(false);
-            } else {
-                x = canvas.width / 2;
-                y = canvas.height - 30;
-                dx = 1.5;
-                dy = -1.5;
-                paddleX = (canvas.width - paddleWidth) / 2;
-            }
-        }
-    }
-
     if (rightPressed && paddleX < canvas.width - paddleWidth) paddleX += 4;
     else if (leftPressed && paddleX > 0) paddleX -= 4;
+    if (gameState === 1) {
+        collisionDetection();
 
-    x += dx;
-    y += dy;
-    requestAnimationFrame(draw);
+        if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) dx = -dx;
+        if (y + dy < ballRadius) dy = -dy;
+        else if (y + dy > canvas.height - ballRadius - 5) {
+            if (x > paddleX && x < paddleX + paddleWidth) {
+                let hitPos = (x - (paddleX + paddleWidth / 2)) / (paddleWidth / 2);
+                dx = hitPos * 2; 
+                dy = -dy;
+            } else {
+                lives--;
+                if (!lives) {
+                    endGame(false);
+                } else {
+                    x = canvas.width / 2;
+                    y = canvas.height - 30;
+                    dx = 1.5;
+                    dy = -1.5;
+                    paddleX = (canvas.width - paddleWidth) / 2;
+                }
+            }
+        }
+
+        x += dx;
+        y += dy;
+    }
+    if (gameState !== 2) {
+        requestAnimationFrame(draw);
+    }
 }
 
 function endGame(isWin) {
+    gameState = 2;
     isGameOver = true;
     if (overlay && overlayText) {
         overlayText.textContent = isWin ? "STAGE CLEAR!" : "GAME OVER";
@@ -231,10 +230,12 @@ function endGame(isWin) {
 }
 
 function restartGame() {
-    isGameOver = true; 
     resetGameVariables();
     initBricks();
     if (overlay) overlay.style.display = "none";
     if (startOverlay) startOverlay.style.display = "flex"; 
-    drawWaitingFrames();
+    
+    gameState = 0;
+    isGameOver = false; 
+    draw();
 }
