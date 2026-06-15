@@ -1,5 +1,6 @@
 const logoBtn = document.getElementById("header");
 const gameSection = document.getElementById("game-section");
+
 if (logoBtn) {
     logoBtn.style.cursor = "pointer";
     logoBtn.addEventListener("dblclick", function(e) {
@@ -9,14 +10,10 @@ if (logoBtn) {
             gameSection.classList.remove("show");
             setTimeout(() => { gameSection.style.display = "none"; }, 500);
             isGameOver = true; 
-        } 
-       
-        else {
+        } else {
             gameSection.style.display = "block";
-    
             setTimeout(() => { 
                 gameSection.classList.add("show"); 
-               
                 gameSection.scrollIntoView({ behavior: "smooth" });
             }, 10);
           
@@ -29,7 +26,7 @@ if (logoBtn) {
 }
 
 const canvas = document.getElementById("gameCanvas");
-const ctx = canvas.getContext("2d");
+const ctx = canvas ? canvas.getContext("2d") : null;
 const overlay = document.getElementById("game-overlay");
 const overlayText = document.getElementById("overlay-text");
 const restartBtn = document.getElementById("restart-btn");
@@ -57,6 +54,7 @@ let isGameOver = true;
 let bricks = [];
 
 function resetGameVariables() {
+    if (!canvas) return;
     x = canvas.width / 2;
     y = canvas.height - 30;
     dx = 3; 
@@ -108,7 +106,6 @@ function collisionDetection() {
                     dy = -dy; 
                     b.status = 0; 
                     score++;
-                    
                     if (score === brickRowCount * brickColumnCount) {
                         endGame(true);
                     }
@@ -134,6 +131,7 @@ function drawPaddle() {
     ctx.closePath();
 }
 
+// 🛠 예외 상황 팅김 방지 안전패치 완료한 벽돌 그리기 함수
 function drawBricks() {
     const rowColors = ["#475569", "#64748b", "#94a3b8", "#cbd5e1", "#ccccff"];
     for (let c = 0; c < brickColumnCount; c++) {
@@ -161,7 +159,7 @@ function drawScoreAndLives() {
 }
 
 function draw() {
-    if (isGameOver) return;
+    if (isGameOver || !ctx) return;
     
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawBricks();
@@ -171,12 +169,9 @@ function draw() {
     collisionDetection();
 
     if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) dx = -dx;
-
     if (y + dy < ballRadius) dy = -dy;
-    
     else if (y + dy > canvas.height - ballRadius - 5) {
         if (x > paddleX && x < paddleX + paddleWidth) {
-          
             let hitPos = (x - (paddleX + paddleWidth / 2)) / (paddleWidth / 2);
             dx = hitPos * 4;
             dy = -dy;
