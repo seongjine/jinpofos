@@ -1,0 +1,217 @@
+@font-face {
+    font-family: 'KblJumpExtended';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2601-5@1.0/KBLJump_EB_ExtendedTTF.woff2') format('woff2');
+    font-weight: normal;
+    font-display: swap;
+}
+body {
+    background-color: #000011;
+
+}
+#top-bar {
+    display: flex;
+    justify-content: space-between; 
+    align-items: center;
+    padding: 13px 30px;
+  background-image: url(https://images.unsplash.com/photo-1560260240-c6ef90a163a4?fm=jpg&q=60&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8JUVCJUIwJTk0JUVCJThCJUE0JTIwJUVCJUIwJUIwJUVBJUIyJUJEJUVEJTk5JTk0JUVCJUE5JUI0fGVufDB8fDB8fHww);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-color: rgba(0, 0, 0, 0.5);
+  background-blend-mode: multiply;
+  
+}
+#header {
+  font-size: 30px;
+  color: #f1f5f9;
+  font-family: 'KblJumpExtended', 
+  sans-serif;
+}
+.nav-links {
+    display: flex;
+    list-style: none;
+    gap: 70px;
+    padding: 0;
+    margin: 0;
+  align-items: center;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #94a3b8;
+    font-weight: 700;
+    font-size: 1rem;
+    transition: 0.3s;
+}
+
+.nav-links a:hover {
+    color: #f1f5f9;
+}
+#main {
+  margin-top: 390px;
+  text-align: center;
+  font-size: 28px;
+  color: rgba(204, 204, 255, 0.6);
+}
+.main-font { font-family: 'Noto Sans KR', sans-serif; }
+.nav-links li {
+    position: relative;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%); /* 👈 중앙 정렬을 위한 설정 */
+    margin-top: 10px;
+    background-color: rgba(26, 26, 48, 0.7);
+    padding: 10px 15px;
+    border-radius: 5px;
+    display: none;
+    white-space: nowrap;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+    z-index: 999;
+}
+.nav-links li:hover .dropdown-menu {
+    display: block;
+}
+
+.dropdown-menu a {
+    color: #ccccff !important;
+    font-size: 0.9rem !important;
+    font-weight: 300;
+    text-decoration: none;
+    outline: none;
+}
+.divider {
+    width: 920px;
+    height: 2px;
+    background-color: rgba(204, 204, 255, 0.3);
+    margin: 50px auto;
+    border: none;
+}
+.project-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 130px;
+    padding: 200px 0;
+    width: 100%;
+    margin-top: 200px;
+    transition: background-color 0.5s ease;
+    background-color: transparent; 
+}
+.project-card {
+    position: relative;
+    width: 800px;
+    max-width: 90%;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    opacity: 1; 
+    z-index: 1;
+}
+.gallery-img {
+    width: 100%;
+    display: block;
+    transition: transform 0.5s ease;
+}
+.project-container:hover {
+    background-color: rgba(0, 0, 0, 0.7);
+}
+.project-container:hover .project-card {
+    opacity: 0.2;
+}
+.project-card:hover {
+    opacity: 1 !important;
+    transform: scale(1.05);
+    z-index: 10;
+}
+.project-info {
+    margin-top: 20px;
+    color: #ccccff;
+    font-size: 1.1rem;
+    text-align: center;
+    opacity: 0;
+    transition: 0.5s ease;
+    transform: translateY(10px);
+}
+.sub-text {
+    display: block;
+    margin-top: 8px;
+    font-size: 0.95rem;
+    opacity: 0.6;
+    transition: 0.3s;
+  text-align: center;
+    width: 100%;
+}
+
+.project-card:hover .project-info {
+    opacity: 1;
+    transform: translateY(0);
+}
+#back-to-top {
+    position: fixed;
+    bottom: 40px;
+    right: 40px;
+    z-index: 100;
+    width: 50px;
+    height: 50px;
+    background-color: #ccccff;
+    color: #000011;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: none;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    font-size: 20px;
+    font-weight: bold;
+    transition: 0.3s;
+    opacity: 0.4;
+}
+
+#back-to-top:hover {
+    opacity: 0.8;
+    background-color: #f1f5f9; 
+    transform: translateY(-5px);
+}
+.footer-text {
+    text-align: center;
+    padding: 20px 0;
+    font-size: 0.8rem;
+    color: rgba(204, 204, 255, 0.3);
+    font-family: sans-serif;
+    letter-spacing: 1px;
+}
+/* 📱 하나로 깔끔하게 정리된 모바일 미디어 쿼리 (768px 이하) */
+@media (max-width: 768px) {
+    /* 1. 상단 바를 세로로 정렬하고 간격 조절 */
+    #top-bar {
+        flex-direction: column;
+        gap: 15px;
+        padding: 20px;
+    }
+    .nav-links {
+        gap: 30px; /* 모바일에서 메뉴 간격이 너무 넓지 않게 조정 */
+    }
+    
+    /* 2. 메인 설명글 크기와 여백 조정 */
+    #main {
+        font-size: 20px;
+        margin-top: 200px;
+    }
+    
+    /* 3. 구분선 크기 모바일에 맞춤 */
+    .divider {
+        width: 90%;
+    }
+
+    /* 4. 이미지 카드 컨테이너 간격 축소 */
+    .project-container {
+        gap: 60px;
+        padding: 50px 0;
+        margin-top: 50px;
+    }
+    .project-card {
+        width: 100%;
+        max-width: 90%;
+    }
+}
