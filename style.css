@@ -62,8 +62,8 @@ body {
     position: absolute;
     top: 100%;
     left: 50%;
-    transform: translateX(-50%); /* 👈 중앙 정렬을 위한 설정 */
-    margin-top: 10px;
+    transform: translateX(-50%);
+    padding-top: 12px;
     background-color: rgba(26, 26, 48, 0.7);
     padding: 10px 15px;
     border-radius: 5px;
