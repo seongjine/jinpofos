@@ -214,4 +214,13 @@ body {
         width: 100%;
         max-width: 90%;
     }
+.dropdown-menu::before {
+    content: "";
+    position: absolute;
+    top: -20px;       /* 👈 창 위쪽으로 20픽셀만큼 투명한 영역을 확장합니다 */
+    left: 0;
+    width: 100%;
+    height: 20px;     /* 👈 CONTACT 글자까지 도달할 수 있는 높이 */
+    background: transparent; /* 완전히 투명해서 눈에 보이지 않음 */
+}
 }
