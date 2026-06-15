@@ -6,26 +6,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JIN POFO</title>
 </head>
-  <body>
+<body>
     <header id="top-bar">
-        <div id="header" id="logo-btn">JIN POFO</div>
+        <div id="header">JIN POFO</div>
         <nav class="nav-bar">
             <ul class="nav-links">
                 <li><a href="#main">WORK</a></li>
                 <li><a href="#">ABOUT</a></li> 
                 <li><a href="#">CONTACT</a>
-                <div class="dropdown-menu">
-        <a href="https://www.instagram.com/seong_jin.e/" target="_blank">Instagram</a>
-    </div></li> 
+                    <div class="dropdown-menu">
+                        <a href="https://www.instagram.com/seong_jin.e/" target="_blank">Instagram</a>
+                    </div>
+                </li> 
             </ul>
         </nav>
     </header>
 
     <div id="main">
-      <span class="main-font">
-        Google Gemini를 사용하여
-        <br>파도를 유화로 표현하여 생성하였습니다 
-      </span>
+        <span class="main-font">
+            Google Gemini를 사용하여
+            <br>파도를 유화로 표현하여 생성하였습니다 
+        </span>
+    </div>
+
+    <div id="game-section">
+        <div id="game-wrapper" style="position: relative; width: 400px; margin: 40px auto; background: #000022; border: 2px solid #ccccff; border-radius: 10px; overflow: hidden;">
+            <canvas id="gameCanvas" width="400" height="400" style="display: block;"></canvas>
+            <div id="game-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: none; flex-direction: column; justify-content: center; align-items: center; z-index: 10;">
+                <h2 id="overlay-text" style="color: #ccccff; margin-bottom: 20px; font-family: sans-serif;">GAME OVER</h2>
+                <button id="restart-btn" style="padding: 10px 20px; background: #ccccff; color: #000011; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">RESTART</button>
+            </div>
+        </div>
     </div>
 
     <div class="divider"></div>
@@ -33,52 +44,57 @@
     <div class="project-container">
         <div class="project-card">
             <img src="https://i.postimg.cc/J7f7kPpR/Gemini-Generated-Image-1d9pgg1d9pgg1d9p.png" alt="Wave 1" class="gallery-img">
-        <div class="project-info">바다 어딘가<br>
-         <span class="sub-text">
-         하늘과 바다 색상을 같게 하고<br>
-          텍스처만 다르게 하여 경계를 흐릿하게 표현해<br>
-        끝없는 바다를 표현하였다</span></div>
+            <div class="project-info">바다 어딘가<br>
+                <span class="sub-text">
+                    하늘과 바다 색상을 같게 하고<br>
+                    텍스처만 다르게 하여 경계를 흐릿하게 표현해<br>
+                    끝없는 바다를 표현하였다
+                </span>
+            </div>
         </div>
 
         <div class="project-card">
             <img src="https://i.postimg.cc/X75hz09C/Gemini-Generated-Image-sogb0osogb0osogb.png" alt="Wave 2" class="gallery-img">
-        <div class="project-info">파도 산맥<br>
-        <span class="sub-text">
-        파도를 크게 표현하여 하늘에서 본<br>
-        눈 내린 산처럼 보이게 표현하였다</span></div>
+            <div class="project-info">파도 산맥<br>
+                <span class="sub-text">
+                    파도를 크게 표현하여 하늘에서 본<br>
+                    눈 내린 산처럼 보이게 표현하였다
+                </span>
+            </div>
         </div>
 
         <div class="project-card">
             <img src="https://i.postimg.cc/4NpL1QTG/Gemini-Generated-Image-67zem867zem867ze.png" alt="Wave 3" class="gallery-img">
-        <div class="project-info">바닷속이 궁금한가?<br>
-        <span class="sub-text">
-        파도들이 소용돌이치며 화면 가운데에
-        <br>파도의 선들이 모여 바닷속으로 시선을 집중 시켰다</span></div>
+            <div class="project-info">바닷속이 궁금한가?<br>
+                <span class="sub-text">
+                    파도들이 소용돌이치며 화면 가운데에
+                    <br>파도의 선들이 모여 바닷속으로 시선을 집중 시켰다
+                </span>
+            </div>
         </div>
     </div>
-<button id="back-to-top" title="Go to top">↑</button>
-<script>
-const topBtn = document.getElementById("back-to-top");
-      window.onscroll = function()
-{if (document.body.scrollTop > 200 || 
-     document.documentElement.scrollTop > 200) {
-topBtn.style.display = "block";
-} else {
-  topBtn.style.display = "none";
-}
-};
-topBtn.addEventListener("click", function() {
-window.scrollTo({
-top: 0,
-behavior: "smooth"
-    });
-});
-</script>
+
+    <button id="back-to-top" title="Go to top">↑</button>
+
     <div class="footer-text">
-    NMGD<br>
-    Jeong Seong-jin
-        <script src="script.js"></script> 
-</body>
-</html>
+        NMGD<br>
+        Jeong Seong-jin
+    </div>
+
+    <script>
+        const topBtn = document.getElementById("back-to-top");
+        window.onscroll = function() {
+            if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+                topBtn.style.display = "block";
+            } else {
+                topBtn.style.display = "none";
+            }
+        };
+        topBtn.addEventListener("click", function() {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+    </script>
+    
+    <script src="script.js"></script> 
 </body>
 </html>
