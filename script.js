@@ -20,23 +20,19 @@ if (logoBtn) {
             }, 10);
           
             resetGameVariables();
-            isGameOver = true; // 💡 처음엔 움직이지 않게 멈춤
+            isGameOver = true;
             if (startOverlay) startOverlay.style.display = "flex"; 
             initBricks();
-            
-            // 렌더링 엔진을 대기 상태로 구동하되 공은 움직이지 않게 처리
-            // (이 구조여야 스타트 버튼을 눌렀을 때 엔진이 멈추지 않고 바로 이어집니다!)
             drawWaitingFrames();
         }
     });
 }
 
-// 🕹️ 스타트 버튼 클릭 이벤트 (이제 완벽하게 엔진이 작동합니다)
 if (startBtn) {
     startBtn.addEventListener("click", function(e) {
         e.stopPropagation(); 
         if (startOverlay) startOverlay.style.display = "none"; 
-        isGameOver = false; // 🔓 잠금 해제! 공이 움직이기 시작합니다.
+        isGameOver = false; 
     });
 }
 
@@ -68,26 +64,20 @@ let lives = 3;
 let isGameOver = true; 
 let bricks = [];
 
-function resetGameVariables() {
+function mouseMoveHandler(e) {
     if (!canvas) return;
-    x = canvas.width / 2;
-    y = canvas.height - 30;
-    
-    // 공의 속도 2배 느리게 설정 (1.5)
-    dx = 1.5; 
-    dy = -1.5; 
-    
-    paddleX = (canvas.width - paddleWidth) / 2;
-    score = 0;
-    lives = 3;
-    if (overlay) overlay.style.display = "none";
-}
+    const rect = canvas.getBoundingClientRect();
+    const relativeX = e.clientX - rect.left;
+    const relativeY = e.clientY - rect.top;
 
-function initBricks() {
-    for (let c = 0; c < brickColumnCount; c++) {
-        bricks[c] = [];
-        for (let r = 0; r < brickRowCount; r++) {
-            bricks[c][r] = { x: 0, y: 0, status: 1 };
+    if (relativeX >= 0 && relativeX <= rect.width && relativeY >= 0 && relativeY <= rect.height) {
+        const scale = canvas.width / rect.width;
+        const canvasMouseX = relativeX * scale;
+        paddleX = canvasMouseX - paddleWidth / 2;
+        if (paddleX < 0) {
+            paddleX = 0;
+        } else if (paddleX > canvas.width - paddleWidth) {
+            paddleX = canvas.width - paddleWidth;
         }
     }
 }
@@ -175,7 +165,6 @@ function drawScoreAndLives() {
     ctx.fillText("LIVES: " + lives, canvas.width - 75, 22);
 }
 
-// 💡 버튼 누르기 전 대기 화면 상태를 부드럽게 유지하는 함수
 function drawWaitingFrames() {
     if (!ctx) return;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -183,14 +172,11 @@ function drawWaitingFrames() {
     drawBall();
     drawPaddle();
     drawScoreAndLives();
-    
-    // 스타트 버튼을 누르면 이 대기 함수를 종료하고 진짜 draw() 루프로 넘겨줍니다.
     if (!isGameOver) {
         draw();
         return;
     }
     
-    // 버튼 누르기 전에도 패들을 마우스나 키보드로 움직일 수 있게 업데이트 유지
     if (rightPressed && paddleX < canvas.width - paddleWidth) paddleX += 4;
     else if (leftPressed && paddleX > 0) paddleX -= 4;
 
@@ -244,7 +230,6 @@ function endGame(isWin) {
     }
 }
 
-// 🔄 재시작 시에도 다시 친절하게 스타트 창이 뜨도록 수정 완료!
 function restartGame() {
     isGameOver = true; 
     resetGameVariables();
