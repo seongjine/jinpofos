@@ -32,7 +32,13 @@
     <div id="game-section">
         <div id="game-wrapper" style="position: relative; width: 400px; margin: 40px auto; background: #000022; border: 2px solid #ccccff; border-radius: 10px; overflow: hidden;">
             <canvas id="gameCanvas" width="400" height="400" style="display: block;"></canvas>
-            <div id="game-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: none; flex-direction: column; justify-content: center; align-items: center; z-index: 10;">
+            
+            <div id="start-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 11;">
+                <h2 style="color: #ccccff; margin-bottom: 20px; font-family: sans-serif; letter-spacing: 2px;">WAVE BREAKER</h2>
+                <button id="start-btn" style="padding: 12px 30px; background: #ccccff; color: #000011; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 1.1rem; transition: 0.3s; box-shadow: 0 0 15px rgba(204,204,255,0.4);">START GAME</button>
+            </div>
+
+            <div id="game-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: none; flex-direction: column; justify-content: center; align-items: center; z-index: 10;">
                 <h2 id="overlay-text" style="color: #ccccff; margin-bottom: 20px; font-family: sans-serif;">GAME OVER</h2>
                 <button id="restart-btn" style="padding: 10px 20px; background: #ccccff; color: #000011; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">RESTART</button>
             </div>
