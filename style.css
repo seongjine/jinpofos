@@ -181,30 +181,22 @@ body {
     font-family: sans-serif;
     letter-spacing: 1px;
 }
-/* 📱 하나로 깔끔하게 정리된 모바일 미디어 쿼리 (768px 이하) */
 @media (max-width: 768px) {
-    /* 1. 상단 바를 세로로 정렬하고 간격 조절 */
     #top-bar {
         flex-direction: column;
         gap: 15px;
         padding: 20px;
     }
     .nav-links {
-        gap: 30px; /* 모바일에서 메뉴 간격이 너무 넓지 않게 조정 */
+        gap: 30px;
     }
-    
-    /* 2. 메인 설명글 크기와 여백 조정 */
     #main {
         font-size: 20px;
         margin-top: 200px;
     }
-    
-    /* 3. 구분선 크기 모바일에 맞춤 */
     .divider {
         width: 90%;
     }
-
-    /* 4. 이미지 카드 컨테이너 간격 축소 */
     .project-container {
         gap: 60px;
         padding: 50px 0;
@@ -217,10 +209,21 @@ body {
 .dropdown-menu::before {
     content: "";
     position: absolute;
-    top: -20px;       /* 👈 창 위쪽으로 20픽셀만큼 투명한 영역을 확장합니다 */
+    top: -20px;
     left: 0;
     width: 100%;
-    height: 20px;     /* 👈 CONTACT 글자까지 도달할 수 있는 높이 */
-    background: transparent; /* 완전히 투명해서 눈에 보이지 않음 */
+    height: 20px;
+    background: transparent;
 }
+}
+#game-section {
+    display: none;
+    opacity: 0;
+    transform: translateY(-20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+#game-section.show {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
 }
