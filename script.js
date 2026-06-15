@@ -20,28 +20,23 @@ if (logoBtn) {
             }, 10);
           
             resetGameVariables();
-            isGameOver = true;
+            isGameOver = true; // 💡 처음엔 움직이지 않게 멈춤
             if (startOverlay) startOverlay.style.display = "flex"; 
             initBricks();
             
-            //
-            if (ctx) {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                drawBricks();
-                drawBall();
-                drawPaddle();
-                drawScoreAndLives();
-            }
+            // 렌더링 엔진을 대기 상태로 구동하되 공은 움직이지 않게 처리
+            // (이 구조여야 스타트 버튼을 눌렀을 때 엔진이 멈추지 않고 바로 이어집니다!)
+            drawWaitingFrames();
         }
     });
 }
 
+// 🕹️ 스타트 버튼 클릭 이벤트 (이제 완벽하게 엔진이 작동합니다)
 if (startBtn) {
     startBtn.addEventListener("click", function(e) {
-        e.stopPropagation();
+        e.stopPropagation(); 
         if (startOverlay) startOverlay.style.display = "none"; 
-        isGameOver = false;
-        draw(); 
+        isGameOver = false; // 🔓 잠금 해제! 공이 움직이기 시작합니다.
     });
 }
 
@@ -77,6 +72,8 @@ function resetGameVariables() {
     if (!canvas) return;
     x = canvas.width / 2;
     y = canvas.height - 30;
+    
+    // 공의 속도 2배 느리게 설정 (1.5)
     dx = 1.5; 
     dy = -1.5; 
     
@@ -178,6 +175,28 @@ function drawScoreAndLives() {
     ctx.fillText("LIVES: " + lives, canvas.width - 75, 22);
 }
 
+// 💡 버튼 누르기 전 대기 화면 상태를 부드럽게 유지하는 함수
+function drawWaitingFrames() {
+    if (!ctx) return;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawBricks();
+    drawBall();
+    drawPaddle();
+    drawScoreAndLives();
+    
+    // 스타트 버튼을 누르면 이 대기 함수를 종료하고 진짜 draw() 루프로 넘겨줍니다.
+    if (!isGameOver) {
+        draw();
+        return;
+    }
+    
+    // 버튼 누르기 전에도 패들을 마우스나 키보드로 움직일 수 있게 업데이트 유지
+    if (rightPressed && paddleX < canvas.width - paddleWidth) paddleX += 4;
+    else if (leftPressed && paddleX > 0) paddleX -= 4;
+
+    requestAnimationFrame(drawWaitingFrames);
+}
+
 function draw() {
     if (isGameOver || !ctx) return;
     
@@ -225,9 +244,12 @@ function endGame(isWin) {
     }
 }
 
+// 🔄 재시작 시에도 다시 친절하게 스타트 창이 뜨도록 수정 완료!
 function restartGame() {
-    isGameOver = false;
+    isGameOver = true; 
     resetGameVariables();
     initBricks();
-    draw();
+    if (overlay) overlay.style.display = "none";
+    if (startOverlay) startOverlay.style.display = "flex"; 
+    drawWaitingFrames();
 }
